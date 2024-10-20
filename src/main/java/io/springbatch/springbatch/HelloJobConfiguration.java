@@ -22,22 +22,41 @@ public class HelloJobConfiguration {
     @Bean
     public Job helloJob() {
         return new JobBuilder("helloJob", jobRepository)
-                .start(helloStep())
+                .start(helloStep1())
+                .next(helloStep2())
                 .build();
     }
 
     @Bean
-    public Step helloStep() {
+    public Step helloStep1() {
         return new StepBuilder("helloStep1", jobRepository)
                 .tasklet(helloTasklet(), transactionManager)
                 .build();
     }
 
     @Bean
-    public Tasklet helloTasklet() {
+    public Step helloStep2() {
+        return new StepBuilder("helloStep2", jobRepository)
+                .tasklet(helloTasklet2(), transactionManager)
+                .build();
+    }
+
+    //tasklet은 기본적으로 무한반복이므로 RepeatStatus 필수
+    @Bean
+    public Tasklet helloTasklet() { //Tasklet은 단일 태스크로 수행되는 로직 구현(비즈니스 로직 구현)
         return (contribution, chunkContext) -> {
             System.out.println(" ============================");
             System.out.println(" >> Hello Spring Batch");
+            System.out.println(" ============================");
+            return RepeatStatus.FINISHED;
+        };
+    }
+
+    @Bean
+    public Tasklet helloTasklet2() {
+        return (contribution, chunkContext) -> {
+            System.out.println(" ============================");
+            System.out.println(" >> Step 2");
             System.out.println(" ============================");
             return RepeatStatus.FINISHED;
         };
