@@ -14,7 +14,7 @@
 
 5. 실행 할 job을 찾지 못하면 예외 발생 
 
-6. Spring Batch4에서는 완료 된 job에서 JobInstanceAlreadyCompleteException이 발생했지만 5에서는 exception은 발생하지 않고 execution에 status는 complete/ exitcode는 noop으로 생성됨 + 완료 안됐으면 정상처리
+6. Spring Batch4에서는 완료 된 job에서 JobInstanceAlreadyCompleteException이 발생했지만 5에서는 exception은 발생하지 않고 execution에 status는 complete / exitcode는 noop으로 생성됨 + 완료 안됐으면 정상처리
 
 
 
@@ -90,3 +90,17 @@ Job, Step, Flow는 실제 배치 job을 실행하고, 구성하기 위한 용도
 - Instance : Exeuction = 1:다
 
 ![스크린샷 2024-10-24 오전 10 03 01](https://github.com/user-attachments/assets/aabb5e77-f7a5-4043-9c47-b9d4443922b0)
+
+## Step
+
+- job을 구성하는 독립적인 하나의 단계 / 실제 배치 처리 정의 및 컨트롤 하는데 모든 정보를 가지고 있는 도메인 객체
+- 입력 - 처리 - 출력의 비즈니스 로직 및 설정
+- task기반 설정
+
+### 기본 구현체 
+1. TaskletStep : 기본, tasklet타입 제어
+2. PartitionStep : 멀티 스레드 / step을 여러개로 분리해서 실행
+3. JobStep : step 내에서 job 실행
+4. FlowStep : step 내에서 flow 실행
+
+
