@@ -75,7 +75,7 @@ Job, Step, Flow는 실제 배치 job을 실행하고, 구성하기 위한 용도
   - 코드 생성 (JobParameterBuilder, DefaultJobParametersConverter) -> 처음꺼 많이씀
   - SpEL 이용 (@Value("#{jobParameter[requestDate]})), @JobScope, @StepScope 선언 필수<br><br>
 
-- Step단계에서 parameter 참조 가능 (tasklet의 StepContribution, ChunContext 둘다 참조 가능)
+- Step단계에서 parameter 참조 가능 (tasklet의 StepContribution, ChunkContext 둘다 참조 가능)
   - stepContribution -> stepExecution -> jobExecution에서 parameter 가져옴
 
 - 어플리케이션 실행 시 주입
@@ -103,4 +103,8 @@ Job, Step, Flow는 실제 배치 job을 실행하고, 구성하기 위한 용도
 3. JobStep : step 내에서 job 실행
 4. FlowStep : step 내에서 flow 실행
 
-
+## StepExecution
+- Step에 대한 한번의 시도 (jobExecution과 jobInstance와의 관계와 유사)
+- step이 실행될 때마다 생성(실제로 실행될 때만) / step별로 생성
+- job 재시작하더라도 완료된 step은 재실행되지 않음
+- JobExecution : StepExecution = 1:다 관계
