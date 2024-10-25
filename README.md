@@ -103,13 +103,13 @@ Job, Step, Flow는 실제 배치 job을 실행하고, 구성하기 위한 용도
 3. JobStep : step 내에서 job 실행
 4. FlowStep : step 내에서 flow 실행
 
-## StepExecution
+### StepExecution
 - Step에 대한 한번의 시도 (jobExecution과 jobInstance와의 관계와 유사)
 - step이 실행될 때마다 생성(실제로 실행될 때만) / step별로 생성
 - job 재시작하더라도 완료된 step은 재실행되지 않음
 - JobExecution : StepExecution = 1:다 관계
 
-## StepContribution 
+### StepContribution 
 - 청크 프로세스의 변경사항을 버퍼링 한 후 StepExecution 상태 업데이트
 - 청크 커밋 직전에 StepExecution 의 apply 메서드를 호출하여 상태 업데이트
 - ExitStatus의 기본 종료코드 외 사용자 정의 종료코드 생성 및 적용 가능
@@ -118,3 +118,8 @@ Job, Step, Flow는 실제 배치 job을 실행하고, 구성하기 위한 용도
 ![스크린샷 2024-10-25 오전 11 37 38](https://github.com/user-attachments/assets/3e49bb87-68db-4536-b94b-aaec2d2ef8d5)
 
 step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 직전에 끝
+
+### ExecutionContext
+- 프레임워크에서 유지 및 관리한다.
+- Map을 가지고 있으며 StepExecution, JobExecution 객체의 상태를 저장하는 공유 객체
+- Job 재시작 시 이미 처리한 Row 데이터는 건너뛰고 이후로 수행하도록 할 때 상태정보 활용

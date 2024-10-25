@@ -6,7 +6,7 @@ spring:
 
   batch:
     job:
-      name: job
+      name: executionJob
 
 
 ---

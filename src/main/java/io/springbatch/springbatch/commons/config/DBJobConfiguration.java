@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,14 +25,14 @@ public class DBJobConfiguration {
     public Job job() {
         return new JobBuilder("job", jobRepository)
 //                .preventRestart()
-                .start(step1())
-                .next(step2())
+                .start(step6())
+                .next(step7())
                 .build();
     }
 
     @Bean
-    public Step step1() {
-        return new StepBuilder("step1", jobRepository)
+    public Step step6() {
+        return new StepBuilder("step6", jobRepository)
                 .tasklet((contribution, chunkContext) -> {
 
 //                    JobParameters jobParameters = contribution.getStepExecution().getJobExecution().getJobParameters();
@@ -54,8 +53,8 @@ public class DBJobConfiguration {
     }
 
     @Bean
-    public Step step2() {
-        return new StepBuilder("step2", jobRepository)
+    public Step step7() {
+        return new StepBuilder("step7", jobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("step2 was executed");
 //                    throw new RuntimeException("step2 has failed");
