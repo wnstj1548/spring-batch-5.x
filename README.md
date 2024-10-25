@@ -108,3 +108,13 @@ Job, Step, Flow는 실제 배치 job을 실행하고, 구성하기 위한 용도
 - step이 실행될 때마다 생성(실제로 실행될 때만) / step별로 생성
 - job 재시작하더라도 완료된 step은 재실행되지 않음
 - JobExecution : StepExecution = 1:다 관계
+
+## StepContribution 
+- 청크 프로세스의 변경사항을 버퍼링 한 후 StepExecution 상태 업데이트
+- 청크 커밋 직전에 StepExecution 의 apply 메서드를 호출하여 상태 업데이트
+- ExitStatus의 기본 종료코드 외 사용자 정의 종료코드 생성 및 적용 가능
+- 단계의 기여도를 나타내고, 특정 단계에 얼마나 많은 데이터를 읽고 처리했는지 등의 통계
+
+![스크린샷 2024-10-25 오전 11 37 38](https://github.com/user-attachments/assets/3e49bb87-68db-4536-b94b-aaec2d2ef8d5)
+
+step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 직전에 끝
