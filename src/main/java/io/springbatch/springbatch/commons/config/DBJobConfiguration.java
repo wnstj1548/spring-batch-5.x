@@ -3,6 +3,7 @@ package io.springbatch.springbatch.commons.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
@@ -18,21 +19,23 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Slf4j
 public class DBJobConfiguration {
 
-    private final JobRepository jobRepository;
+    private final JobRepository customJobRepository;
     private final PlatformTransactionManager transactionManager;
+    private final JobExecutionListener jobExecutionListener;
 
     @Bean
     public Job job() {
-        return new JobBuilder("job", jobRepository)
+        return new JobBuilder("job", customJobRepository)
 //                .preventRestart()
                 .start(step6())
                 .next(step7())
+                .listener(jobExecutionListener)
                 .build();
     }
 
     @Bean
     public Step step6() {
-        return new StepBuilder("step6", jobRepository)
+        return new StepBuilder("step6", customJobRepository)
                 .tasklet((contribution, chunkContext) -> {
 
 //                    JobParameters jobParameters = contribution.getStepExecution().getJobExecution().getJobParameters();
@@ -54,7 +57,7 @@ public class DBJobConfiguration {
 
     @Bean
     public Step step7() {
-        return new StepBuilder("step7", jobRepository)
+        return new StepBuilder("step7", customJobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("step2 was executed");
 //                    throw new RuntimeException("step2 has failed");
