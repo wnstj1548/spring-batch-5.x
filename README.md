@@ -16,6 +16,7 @@
 
 6. Spring Batch4에서는 완료 된 job에서 JobInstanceAlreadyCompleteException이 발생했지만 5에서는 exception은 발생하지 않고 execution에 status는 complete / exitcode는 noop으로 생성됨 + 완료 안됐으면 정상처리
 
+7. SimpleJobExecutor 사라짐 -> TaskExecutorJobLauncher 사용
 
 
 # 공부 내용 정리
@@ -130,3 +131,21 @@ step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 �
 - JobLauncher, Job, Step 구현체 내부에서 CRUD 기능
 - BatchConfigurer 인터페이스 구현 or 상속해서 JobRepository 설정 커스터마이징 가능 -> jdbc : jobRepositoryFactoryBean / in memory : MapJobRepositoryFactoryBean
 - jdbc로 할 때는 내부적으로 트랜잭션 처리해주고 isolation의 기본값은 serialize / prefix 변경 가능 default는 BATCH_
+
+### JobLauncher
+- 배치 job을 실행시키는 역할 / job, jobParameter를 인자로 받 / 배치 작업 후 client에게 job execution 반환
+- 스프링 부트 배치가 구동되면 jobLauncher 빈 자동생성
+- job 실행 (jobLauncher.run(job, jobParameters)) / spring boot에서는 JobLauncherApplicationRunner가 알아서 실
+
+### 동기적 실행
+- taskExecutor를 SyncTaskExecutor로 설정 (기본값)
+- 처리 완료 후 client에게 반환
+- 스케줄러에 따른 배치처리에 적합 (길어도 됨)
+
+### 비동기적 실행
+- taskExecutor를 SimpleAsyncTaskExecutor로 설정한 경우
+- jobExecution 획득 후 클라이언트 반환, 이후 배치처리 완료
+- http 요청에 대한 배치처리에 적합
+
+<img width="1317" alt="스크린샷 2024-10-26 오후 12 21 29" src="https://github.com/user-attachments/assets/0b050a14-410a-4528-b49f-a2bfb135af35">
+

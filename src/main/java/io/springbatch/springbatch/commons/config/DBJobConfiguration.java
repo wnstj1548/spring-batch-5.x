@@ -29,7 +29,6 @@ public class DBJobConfiguration {
 //                .preventRestart()
                 .start(step6())
                 .next(step7())
-                .listener(jobExecutionListener)
                 .build();
     }
 
@@ -48,8 +47,8 @@ public class DBJobConfiguration {
 //
 //                    Map<String, Object> jobParameters1 = chunkContext.getStepContext().getJobParameters();
                     //parameter 변경하면 map은 변경 안됨
-
                     log.info("step1 was executed");
+                    Thread.sleep(3000);
                     return RepeatStatus.FINISHED;
                 }, transactionManager)
                 .build();
