@@ -7,7 +7,7 @@ spring:
   batch:
     job:
       name: job
-
+#     name : ${job.name:NONE} -> 파라미터 바인딩
 
 ---
 spring:

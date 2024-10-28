@@ -149,3 +149,13 @@ step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 �
 
 <img width="1317" alt="스크린샷 2024-10-26 오후 12 21 29" src="https://github.com/user-attachments/assets/0b050a14-410a-4528-b49f-a2bfb135af35">
 
+## 배치 초기화 설정
+
+1. JobLauncherApplicationRunner -> Batch 작성을 실행 / ApplicationRunner의 구현체 / 기본적으로 빈으로 등록된 모든 job을 실행
+   
+2. BatchProperties (application.properties / application.yml) -> BatchAutoConfiguration에서 함
+    - batch 환경 설정 / job 이름 및 스키마 초기화 설정, 테이블 prefix 등 값 설정 가능
+   
+3. job 실행 옵션
+    - 지정한 Batch Job만 실행하도록 할 수 있음 / spring.batch.job.names: ${job.name:NONE}
+    - application 실행 시 Program argument로 job이름 입력 (--job.name = helloJob / --job.name = helloHob, simpleJob)
