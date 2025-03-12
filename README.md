@@ -12,9 +12,9 @@
 
 4. JobLauncher가 프록시 객체가 아닌 실제 객체라 DefaultBatchConfiguration에서 얻어 올 필요없이 바로 타입 캐스팅 가능 <br><br>
 
-5. 실행 할 job을 찾지 못하면 예외 발생 
+5. 실행 할 job을 찾지 못하면 예외 발생<br><br>
 
-6. Spring Batch4에서는 완료 된 job에서 JobInstanceAlreadyCompleteException이 발생했지만 5에서는 exception은 발생하지 않고 execution에 status는 complete / exitcode는 noop으로 생성됨 + 완료 안됐으면 정상처리
+6. Spring Batch4에서는 완료 된 job에서 JobInstanceAlreadyCompleteException이 발생했지만 5에서는 exception은 발생하지 않고 execution에 status는 complete / exitcode는 noop으로 생성됨 + 완료 안됐으면 정상처리 <br><br>
 
 7. SimpleJobExecutor 사라짐 -> TaskExecutorJobLauncher 사용
 
@@ -159,3 +159,9 @@ step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 �
 3. job 실행 옵션
     - 지정한 Batch Job만 실행하도록 할 수 있음 / spring.batch.job.names: ${job.name:NONE}
     - application 실행 시 Program argument로 job이름 입력 (--job.name = helloJob / --job.name = helloHob, simpleJob)
+
+## 스프링 배치 실행
+
+1. jobBuilderFactory는 사라짐 (5.0 이상)
+2. jobBuilder, repository넘기면 다음 메서드 (start)의 파라미터에 따라 jobBuilder가 SimpleJob / FlowJob을 생성한다.
+3. 

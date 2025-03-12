@@ -2,11 +2,11 @@ spring:
   application:
     name : spring-batch
   profiles:
-    active: local
+    active: mysql
 
   batch:
     job:
-      name: job
+      name: flowJob
 #     name : ${job.name:NONE} -> 파라미터 바인딩
 
 ---
@@ -37,5 +37,5 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      enabled: false
+      enabled: true
 
