@@ -164,4 +164,17 @@ step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 �
 
 1. jobBuilderFactory는 사라짐 (5.0 이상)
 2. jobBuilder, repository넘기면 다음 메서드 (start)의 파라미터에 따라 jobBuilder가 SimpleJob / FlowJob을 생성한다.
-3. 
+
+## SimpleJob
+1. job의 구현체 -> simpleJobBuilder에서 생성
+2. 여러 단계의 step으로 구성되어있으며, step을 순차적으로 실행한다.
+3. 모든 step이 완료되어야 job이 성공 / 마지막에 실행한 step의 상태가 job의 상태가 된다.
+
+### simpleJob 구현체에서의 함수들
+1. start(Step step) : 최초 한 번 설정
+2. next(Step step) : 횟수 제한 x
+3. incrementer(JobParametersIncrementer) : JobParameter 값 자동 증가 -> 재실행 가능
+4. preventRestart(boolean) : 기본값 true, false로 설정 시 실패해도 재실행 불가능함
+5. validator(JobParameterValidator) : JobParameter 실행 전 검증
+6. listener(JobExecutionListener) : job, step 등 전후에 리스너 설정 가능
+

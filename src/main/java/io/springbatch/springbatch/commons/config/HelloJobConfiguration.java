@@ -1,9 +1,10 @@
 package io.springbatch.springbatch.commons.config;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.Step;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
+import org.springframework.batch.core.listener.JobExecutionListenerSupport;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -24,6 +25,20 @@ public class HelloJobConfiguration {
         return new JobBuilder("helloJob", jobRepository)
                 .start(helloStep1())
                 .next(helloStep2())
+                .incrementer(new RunIdIncrementer())
+                .validator(new JobParametersValidator() {
+                    @Override
+                    public void validate(JobParameters parameters) throws JobParametersInvalidException {
+
+                    }
+                })
+                .preventRestart()
+                .listener(new JobExecutionListener() {
+                    @Override
+                    public void beforeJob(JobExecution jobExecution) {
+
+                    }
+                })
                 .build();
     }
 
