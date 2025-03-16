@@ -178,3 +178,10 @@ step execution이 생성(tasklet이 수행되는 과정) / db에 커밋하기 �
 5. validator(JobParameterValidator) : JobParameter 실행 전 검증
 6. listener(JobExecutionListener) : job, step 등 전후에 리스너 설정 가능
 
+#### validator <br>
+-> 기본적으로 DefaultJobParametersValidator를 지원, 복잡한 구조가 필요하면 implements해서 사용 <br>
+requiredKeys : 필수적으로 넣어야되는 파라미터의 키 값 <br>
+optionalKeys : 선택적 파라미터 키 값 <br>
+<br>
+필수 값 없으면 JobParametersInvalidException 발생 <br>
+jobRepository 기능 실행 전 한번 검증 / job 실행 전 한번 더 검증

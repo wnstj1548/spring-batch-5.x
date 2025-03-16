@@ -6,7 +6,7 @@ spring:
 
   batch:
     job:
-      name: helloJob
+      name: validatorJob
 #     name : ${job.name:NONE} -> 파라미터 바인딩
 
 
