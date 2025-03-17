@@ -31,7 +31,7 @@ public class FlowJobConfiguration {
                 .build();
     }
 
-    @Bean
+//    @Bean
     public Flow flow() {
         FlowBuilder<Flow> flowBuilder = new FlowBuilder<>("flow");
         return flowBuilder.start(flowStep1())

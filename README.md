@@ -185,3 +185,35 @@ optionalKeys : 선택적 파라미터 키 값 <br>
 <br>
 필수 값 없으면 JobParametersInvalidException 발생 <br>
 jobRepository 기능 실행 전 한번 검증 / job 실행 전 한번 더 검증
+
+#### preventRestart <br>
+
+-> job의 재시작 여부 결정 / false일 시 실패해도 재시작을 지원하지 않음.
+<br>
+JobExecution 존재하는지 검사 -> 존재 x -> 실행여부 상관없음 <br>
+JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
+.preventRestart() 하면 false로 설정
+
+#### incrementer <br>
+
+-> rdb에서 identity로 올리는 것과 비슷함 / .incrementer(new RunIdIncrementer)
+
+### SimpleJob 흐름도 <br>
+
+![배치실행+흐름도](https://github.com/user-attachments/assets/880807e9-a052-47e6-8835-09b8fec6e1b2)
+
+## StepBuilder <br>
+
+1. stepBuilderFactory는 사라짐, JobRepository 바로 파라미터로 넣는 형식
+
+### 종류
+
+1. taskletStepBuilder -> tasklet 구현체 실행
+2. SimpleStepBuilder -> chunkOrientedTasklet 실행
+3. PartitionStepBuilder -> partitionStep 생성, 멀티쓰레드
+4. JobStepBuilder -> step 안에 job을 실행한다
+5. FlowStepBuilder -> step 안에 flow를 실행한다.
+
+![배치실행+흐름도 2](https://github.com/user-attachments/assets/109140b1-8b0a-46c8-9749-17a46f787b88)
+
+

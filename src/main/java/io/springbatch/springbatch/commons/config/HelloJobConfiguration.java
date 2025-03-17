@@ -1,5 +1,6 @@
 package io.springbatch.springbatch.commons.config;
 
+import io.springbatch.springbatch.commons.incrementer.CustomJobParametersIncrementer;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -25,14 +26,15 @@ public class HelloJobConfiguration {
         return new JobBuilder("helloJob", jobRepository)
                 .start(helloStep1())
                 .next(helloStep2())
-                .incrementer(new RunIdIncrementer())
+//                .incrementer(new RunIdIncrementer())
+                .incrementer(new CustomJobParametersIncrementer())
                 .validator(new JobParametersValidator() {
                     @Override
                     public void validate(JobParameters parameters) throws JobParametersInvalidException {
 
                     }
                 })
-                .preventRestart()
+//                .preventRestart()
                 .listener(new JobExecutionListener() {
                     @Override
                     public void beforeJob(JobExecution jobExecution) {
