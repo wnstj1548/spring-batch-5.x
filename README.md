@@ -230,6 +230,15 @@ JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
 #### 함수
 
 1. tasklet(Tasklet)
-2. startLimit(Integer) -> 설정한 만큼 실행되고 초과 시 오류발생
+2. startLimit(Integer) -> 실행 횟수 조정, step마다 설정, 설정 값 초과하면 exception, default는 Integer.MAX_VALUE
 3. allowStartIfComplete(true) -> 완료된 step이어도 실행
 4. listener(StepExecutionListener) -> 리스너 추가
+
+## Tasklet
+
+- step 내에서 구성되고 실행되는 도메인 객체로서 단일 테스크를 수행하기 위한 것
+- taskletStep에 의해 반복적으로 수행 or 종료된다. 
+-> RepeatStatus (FINISHED, CONTINUABLE) / null로 반환하면 FINISHED
+- 익명 클래스 or 구현 클래스 만들어서 사용 -> 메서드 실행 시 taskletStepBuilder가 반환되어 관련 설정 가능
+- step에는 하나의 tasklet만 가질 수 있으며, 많을 경우 마지막만 적
+
