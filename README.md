@@ -216,4 +216,20 @@ JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
 
 ![배치실행+흐름도 2](https://github.com/user-attachments/assets/109140b1-8b0a-46c8-9749-17a46f787b88)
 
+### TaskletStep
 
+1. TaskletStep이 tasklet을 실행시, RepeatTemplate을 사용해서 Tasklet 반복, Tasklet은 내부적으로 Transaction 처리함
+
+#### task 기반 vs chunk 기반
+
+- chunk 기반 : 하나의 큰 덩어리를 n개씩 나눠서 실행한다는 의미, 대량 처리에 효과적
+- task 기반 : 단일 작업 기반으로 처리, 주로 tasklet 구현체 만들어서 사용, 대량 처리 시 chunk 기반보다 복잡함
+
+<img width="1079" alt="스크린샷 2025-03-18 오전 11 21 29" src="https://github.com/user-attachments/assets/be8c57be-37c5-4c3c-8c41-036e58d5eac6" />
+
+#### 함수
+
+1. tasklet(Tasklet)
+2. startLimit(Integer) -> 설정한 만큼 실행되고 초과 시 오류발생
+3. allowStartIfComplete(true) -> 완료된 step이어도 실행
+4. listener(StepExecutionListener) -> 리스너 추가
