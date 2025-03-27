@@ -6,7 +6,7 @@ spring:
 
   batch:
     job:
-      name: taskletStepJob
+      name: parentJob
 #     name : ${job.name:NONE} -> 파라미터 바인딩
 
 

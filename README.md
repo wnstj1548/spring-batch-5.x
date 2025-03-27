@@ -242,3 +242,10 @@ JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
 - 익명 클래스 or 구현 클래스 만들어서 사용 -> 메서드 실행 시 taskletStepBuilder가 반환되어 관련 설정 가능
 - step에는 하나의 tasklet만 가질 수 있으며, 많을 경우 마지막만 적
 
+## JobStep
+
+- Job안에 Step이 있고 step안에 job이 있는 구조
+- 테이블 자체는 다른 하나의 job으로 처리된다.
+- job을 실행할 launcher 필요
+- .launcher(JobLauncher) -> 실행할 jobLauncher 설정
+- .parametersExtractor(ParametersExtractor) -> step의 ExecutionContext를 Job이 실행되는데 필요한 JobParamters로 변환

@@ -35,14 +35,14 @@ public class ExecutionContextConfiguration {
                 .build();
     }
 
-    @Bean
+//    @Bean
     public Step step1() {
         return new StepBuilder("step1", jobRepository)
                 .tasklet(executionContextTasklet1, transactionManager)
                 .build();
     }
 
-    @Bean
+//    @Bean
     public Step step2() {
         return new StepBuilder("step2", jobRepository)
                 .tasklet(executionContextTasklet2, transactionManager)

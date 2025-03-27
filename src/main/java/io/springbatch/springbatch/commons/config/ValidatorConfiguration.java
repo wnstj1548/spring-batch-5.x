@@ -1,7 +1,5 @@
 package io.springbatch.springbatch.commons.config;
 
-import io.springbatch.springbatch.commons.validator.CustomJobParametersValidator;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.job.DefaultJobParametersValidator;
@@ -13,9 +11,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
