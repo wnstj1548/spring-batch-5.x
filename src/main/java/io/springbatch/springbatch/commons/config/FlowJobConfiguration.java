@@ -7,6 +7,7 @@ import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.job.flow.Flow;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
@@ -25,18 +26,13 @@ public class FlowJobConfiguration {
     @Bean
     public Job flowJob() {
         return new JobBuilder("flowJob", jobRepository)
-                .start(flow())
-                .next(flowStep3())
+                .incrementer(new RunIdIncrementer())
+                .start(flowStep1())
+                .on("COMPLETED").to(flowStep3())
+                .from(flowStep1())
+                .on("FAILED").to(flowStep2())
                 .end()
                 .build();
-    }
-
-//    @Bean
-    public Flow flow() {
-        FlowBuilder<Flow> flowBuilder = new FlowBuilder<>("flow");
-        return flowBuilder.start(flowStep1())
-                .next(flowStep2())
-                .end();
     }
 
     @Bean
@@ -44,7 +40,8 @@ public class FlowJobConfiguration {
         return new StepBuilder("flowStep1", jobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("flowStep1 was executed");
-                    return RepeatStatus.FINISHED;
+                    throw new RuntimeException("step1 error");
+//                    return RepeatStatus.FINISHED;
                 }), transactionManager)
                 .build();
     }

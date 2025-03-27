@@ -249,3 +249,23 @@ JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
 - job을 실행할 launcher 필요
 - .launcher(JobLauncher) -> 실행할 jobLauncher 설정
 - .parametersExtractor(ParametersExtractor) -> step의 ExecutionContext를 Job이 실행되는데 필요한 JobParamters로 변환
+
+## FlowJob
+
+- 상태에 따라 흐름을 전환하도록 구성가능
+  - step이 실패해도 job은 실패하지 않아야되는 경우
+  - step 성공 시 다음에 실행해야 될 step을 구분해야되는 경우
+  - 특정 step은 실행하지 않도록 구성해야하는 경우
+- Flow와 Job의 흐름을 구성하는데만 관여하고 실제 비즈니스 로직은 step에서 실행된다.
+- 내부적으로 SimpleFlow 객체를 포함하고 있으며 Job 실행 시 호출된다.
+
+### Builder
+
+- .start(Step)
+- .on(String pattern) 
+-> step의 실행 결과로 돌려받는 종료 상태(ExitStatus)를 캐치하여 매칭, TransitionBuilder 반환
+- .to(Step) -> 다음으로 이동할 step 지정
+- .stop() / .fail() / .end() / stopAndRestart() -> 중지/실패/종료하도록 Flow 종료
+- .from(Step) -> 이전 단계의 step의 flow를 추가 정의
+- .next(Step) 
+- .end() -> build 앞에 위치하면 FlowBuilder 종료 및 SimpleFlow 객체 생성
