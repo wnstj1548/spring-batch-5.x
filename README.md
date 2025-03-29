@@ -282,4 +282,17 @@ JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
 
    ### ExitStatus -> JobExecution, StepExecution이 어떤 상태로 종료되었는지
     - BatchStatus와 동일한 값으로 설정
-    - UNKNOWN, EXECUTING, COMPLETED, NOOP, FAILED, STOPPED
+    - UNKNOWN, EXECUTING, COMPLETED, NOOP, FAILED, STOPPED<br>
+   
+
+2. Transition Builder
+
+- .on(String pattern) -> transitionBuilder 반환 / 특수문자는 *, ?만 허용
+- .to(Step, Flow, JobExecutionDecider) -> 매칭되면 이동
+- .stop() / fail() / end() / stopAndRestart(Step, Flow, JobExecutionDecider) -> job의 BatchStatus, ExitStatus 반영
+- .from()
+
+stop() -> jobExecution, ExitStatus, FlowExecutionStatus -> STOPPED
+fail() -> jobExecution, ExitStatus, FlowExecutionStatus -> FAILED
+end() -> jobExecution, ExitStatus,FlowExecutionStatus -> COMPLETED / step이 FAILED여도 COMPLETED로 종료, 재시작 불가
+stopAndRestart() -> 중단 이전에만 COMPLETED, 이후는 STOPPED 재시작 시 이후부터 시작

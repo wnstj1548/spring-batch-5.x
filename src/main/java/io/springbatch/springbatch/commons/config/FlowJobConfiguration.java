@@ -2,6 +2,7 @@ package io.springbatch.springbatch.commons.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.job.builder.FlowBuilder;
@@ -27,9 +28,17 @@ public class FlowJobConfiguration {
     public Job flowJob() {
         return new JobBuilder("flowJob", jobRepository)
                 .start(flowStep1())
-                .on("COMPLETED").to(flowStep3())
+                    .on("FAILED")
+                    .to(flowStep2())
+                    .on("FAILED")
+                    .stop()
                 .from(flowStep1())
-                .on("FAILED").to(flowStep2())
+                    .on("*")
+                    .to(flowStep3())
+                    .next(flowStep4())
+                .from(flowStep2())
+                    .on("*")
+                    .to(flowStep5())
                 .end()
                 .build();
     }
@@ -55,7 +64,7 @@ public class FlowJobConfiguration {
         return new StepBuilder("flowStep1", jobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("flowStep1 was executed");
-//                    throw new RuntimeException("step1 error");
+                    contribution.setExitStatus(ExitStatus.FAILED);
                     return RepeatStatus.FINISHED;
                 }), transactionManager)
                 .build();
@@ -86,6 +95,16 @@ public class FlowJobConfiguration {
         return new StepBuilder("flowStep4", jobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("flowStep4 was executed");
+                    return RepeatStatus.FINISHED;
+                }), transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step flowStep5() {
+        return new StepBuilder("flowStep5", jobRepository)
+                .tasklet(((contribution, chunkContext) -> {
+                    log.info("flowStep5 was executed");
                     return RepeatStatus.FINISHED;
                 }), transactionManager)
                 .build();
