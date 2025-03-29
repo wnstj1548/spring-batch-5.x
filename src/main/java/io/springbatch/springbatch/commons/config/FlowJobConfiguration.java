@@ -26,7 +26,6 @@ public class FlowJobConfiguration {
     @Bean
     public Job flowJob() {
         return new JobBuilder("flowJob", jobRepository)
-                .incrementer(new RunIdIncrementer())
                 .start(flowStep1())
                 .on("COMPLETED").to(flowStep3())
                 .from(flowStep1())
@@ -36,12 +35,28 @@ public class FlowJobConfiguration {
     }
 
     @Bean
+    public Flow flowA() {
+        FlowBuilder<Flow> flowBuilder = new FlowBuilder<>("flowA");
+        return flowBuilder.start(flowStep1())
+                .next(flowStep2())
+                .build();
+    }
+
+    @Bean
+    public Flow flowB() {
+        FlowBuilder<Flow> flowBuilder = new FlowBuilder<>("flowB");
+        return flowBuilder.start(flowStep3())
+                .next(flowStep4())
+                .build();
+    }
+
+    @Bean
     public Step flowStep1() {
         return new StepBuilder("flowStep1", jobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("flowStep1 was executed");
-                    throw new RuntimeException("step1 error");
-//                    return RepeatStatus.FINISHED;
+//                    throw new RuntimeException("step1 error");
+                    return RepeatStatus.FINISHED;
                 }), transactionManager)
                 .build();
     }
@@ -61,6 +76,16 @@ public class FlowJobConfiguration {
         return new StepBuilder("flowStep3", jobRepository)
                 .tasklet(((contribution, chunkContext) -> {
                     log.info("flowStep3 was executed");
+                    return RepeatStatus.FINISHED;
+                }), transactionManager)
+                .build();
+    }
+
+    @Bean
+    public Step flowStep4() {
+        return new StepBuilder("flowStep4", jobRepository)
+                .tasklet(((contribution, chunkContext) -> {
+                    log.info("flowStep4 was executed");
                     return RepeatStatus.FINISHED;
                 }), transactionManager)
                 .build();

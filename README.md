@@ -261,11 +261,25 @@ JobExecution 존재하는지 검사 -> 존재 o -> JobRestartException <br>
 
 ### Builder
 
-- .start(Step)
+- .start(Step, Flow)
 - .on(String pattern) 
 -> step의 실행 결과로 돌려받는 종료 상태(ExitStatus)를 캐치하여 매칭, TransitionBuilder 반환
 - .to(Step) -> 다음으로 이동할 step 지정
 - .stop() / .fail() / .end() / stopAndRestart() -> 중지/실패/종료하도록 Flow 종료
 - .from(Step) -> 이전 단계의 step의 flow를 추가 정의
-- .next(Step) 
+- .next(Step, Flow, JobExecutionDecider) 
 - .end() -> build 앞에 위치하면 FlowBuilder 종료 및 SimpleFlow 객체 생성
+
+## Transition
+
+1. 배치 상태 유형 -> BatchStatus / ExitStatus / FlowExecutionStatus
+
+   ### BatchStatus -> jobExecution / stepExecution의 속성으로 종료 후 최종 결과 상태 정의
+    - simpleJob -> 마지막 step의 ExitStatus (Step이 실패 시 그게 마지막 step)
+    - flowJob -> flow내 step의 ExitStatus , 마지막 Flow값이 상태값
+    - enum타입 (COMPLETED, STARTING, STARTED, STOPPING, STOPPED, FAILED, ABANDONED, UNKNOWN)
+    - ABANDONED는 처리는 완료했지만 성공하지 못한 단계와 재시작 시 건너뛰어야 하는 단
+
+   ### ExitStatus -> JobExecution, StepExecution이 어떤 상태로 종료되었는지
+    - BatchStatus와 동일한 값으로 설정
+    - UNKNOWN, EXECUTING, COMPLETED, NOOP, FAILED, STOPPED
